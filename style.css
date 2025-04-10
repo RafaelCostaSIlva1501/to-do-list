@@ -2,179 +2,288 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  transition: all 0.3s;
 }
 
-hr {
-  margin: 10px 0;
+:root {
+  --cor1: #ffffff;
+  --cor2: #f0f2f5;
+  --cor3: #e6e9ef;
+  --cor4: #dce0e6;
+  --cor5: #c4c9d1;
+  --cor6: #b1b6bf;
+  --cor7: #333333;
+  --cor8: #3a86ff;
+  --cor9: #265ecf;
+}
+
+.dark-theme {
+  --cor1: #1a1a1a;
+  --cor2: #121212;
+  --cor3: #1e1e1e;
+  --cor4: #2a2a2a;
+  --cor5: #3a3a3a;
+  --cor6: #4d4d4d;
+  --cor7: #f0f0f0;
+  --cor8: #3a86ff;
+  --cor9: #62a0ff;
+  --cor10: #90bfff;
+}
+
+button {
+  display: flex;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+  transform: scale(1.05);
 }
 
 body {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  max-height: 100vh;
+  background: var(--cor2);
   font-family: Arial, sans-serif;
-  background: #f8f9fa;
+  color: var(--cor7);
 }
 
-@media (min-width: 768px) {
-  body {
-    flex-direction: row;
-  }
-}
-
-.list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-  max-width: 400px;
-  background: #f4f4f4;
-  padding: 20px;
-  border-right: 2px solid #ddd;
-}
-
-.list header {
-  display: flex;
-  gap: 10px;
-}
-
-.list input {
-  flex: 1;
-  height: 40px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.list button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  background-color: #007bff;
-  border: none;
-  border-radius: 7px;
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.list button:hover {
-  background-color: #0056b3;
-}
-
-#listaTarefas {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  list-style: none;
-  padding: 0;
-  overflow-y: auto;
-  max-height: 60vh;
-}
-
-#listaTarefas li {
+body > header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  background: white;
-  border-radius: 5px;
-  cursor: pointer;
+  background-color: var(--cor4);
+  border-bottom: 2px solid var(--cor5);
+  color: var(--cor7);
+}
+
+body > header button span {
+  color: var(--cor7);
+}
+
+body > header div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+main {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: var(--cor2);
+}
+
+.container-tasks {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  width: 0;
+
+  background: var(--cor3);
+  border-right: 2px solid var(--cor5);
+
+  overflow-x: hidden;
+
   transition: all 0.3s;
 }
 
-#listaTarefas li:hover {
-  background: #ddd;
+.container-tasks header {
+  display: flex;
+  gap: 10px;
+
+  padding: 10px;
+
+  background-color: var(--cor4);
 }
 
-#listaTarefas li div {
+.container-tasks input {
+  flex: 1;
+
+  height: 40px;
+  padding: 8px;
+
+  background-color: var(--cor1);
+  border: 1px solid var(--cor6);
+  border-radius: 5px;
+  outline: none;
+
+  color: var(--cor7);
+}
+
+.container-tasks button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 40px;
+  height: 40px;
+
+  background-color: var(--cor8);
+  border: none;
+  border-radius: 7px;
+
+  color: var(--cor7);
+
+  cursor: pointer;
+
+  transition: all 0.3s;
+}
+
+.container-tasks button:hover {
+  background-color: var(--cor9);
+}
+
+.container-tasks ul {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  list-style: none;
+  overflow-y: auto;
+  background-color: var(--cor3);
+}
+
+.container-tasks ul li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: var(--cor1);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: var(--cor7);
+}
+
+.container-tasks ul li:hover {
+  background: var(--cor5);
+}
+
+.container-tasks ul li div {
   display: flex;
   gap: 5px;
 }
 
-#listaTarefas li div button {
+.container-tasks ul li div button {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 30px;
   height: 30px;
-  background-color: #007bff;
+  background-color: var(--cor8);
   border: none;
   border-radius: 7px;
-  color: white;
+  color: var(--cor7);
   cursor: pointer;
   transition: all 0.3s;
 }
 
-.tasks {
-  flex: 1;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.task-details {
+.show-tasks {
   display: flex;
   flex-direction: column;
   gap: 10px;
   width: 100%;
-
-  background: white;
+  background: var(--cor1);
   padding: 20px;
   border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 5px var(--cor5);
+  overflow: hidden;
+  color: var(--cor7);
 }
 
-.task-details header {
+.show-tasks p {
+  text-align: center;
+}
+
+.show-tasks header {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
-  padding: 5px;
+  gap: 5px;
+  padding: 10px;
+  background-color: var(--cor3);
   border-radius: 5px;
+  color: var(--cor7);
 }
 
-.task-details div {
+.show-tasks header span {
+  font-size: 2rem;
+  color: var(--cor7);
+}
+
+.show-tasks header div {
   display: flex;
   gap: 5px;
+  width: 100%;
 }
 
-.task-details div input {
-  flex: 1;
+.show-tasks input {
+  width: 100%;
   padding: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--cor6);
   border-radius: 5px;
+  background-color: var(--cor1);
+  color: var(--cor7);
 }
 
-.task-details div button {
+.show-tasks div button {
   width: auto;
   padding: 8px 12px;
   border: none;
   border-radius: 7px;
-  background-color: #007bff;
-  color: white;
+  background-color: var(--cor8);
+  color: var(--cor1);
   cursor: pointer;
   transition: all 0.3s;
 }
 
-.subtasks {
+.show-tasks div button:hover {
+  background-color: var(--cor9);
+}
+
+.show-tasks ul {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding: 10px;
+  list-style: none;
+  overflow-y: auto;
+  background-color: var(--cor3);
 }
 
-.subtasks div {
+.show-tasks li {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  background: #e9ecef;
+  background: var(--cor1);
   border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: var(--cor7);
 }
 
-.subtasks div button {
+.show-tasks li:hover {
+  background: var(--cor5);
+}
+
+.show-tasks li div {
+  display: flex;
+  gap: 5px;
+}
+
+.show-tasks li div button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -188,22 +297,6 @@ body {
   transition: all 0.3s;
 }
 
-.subtasks div button:hover {
+.show-tasks li div button:hover {
   background-color: #0056b3;
-}
-
-@media (max-width: 768px) {
-  .list {
-    width: 100%;
-    max-width: none;
-    border-right: none;
-    border-bottom: 2px solid #ddd;
-  }
-  .tasks {
-    width: 100%;
-    padding: 10px;
-  }
-  .task-details {
-    width: 100%;
-  }
 }
