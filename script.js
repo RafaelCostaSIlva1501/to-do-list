@@ -17,11 +17,17 @@ DOM.toggleList.forEach((e) => {
     listState = !listState;
 
     if (window.innerWidth > window.innerHeight) {
+      DOM.containerTask.style.width = listState ? "0px" : "70%";
+      DOM.containerTask.style.borderRight = listState
+        ? "0px solid black"
+        : "2px solid var(--cor5)";
+      DOM.showTasks.style.width = listState ? "100%" : "30%";
+    } else {
       DOM.containerTask.style.width = listState ? "0px" : "80%";
       DOM.containerTask.style.borderRight = listState
         ? "0px solid black"
         : "2px solid var(--cor5)";
-      DOM.showTasks.style.display = listState ? "100%" : "20%";
+      DOM.showTasks.style.display = listState ? "flex" : "none";
     }
   });
 });
@@ -54,6 +60,7 @@ DOM.addTask.addEventListener("click", () => {
   const task = {
     title: title,
     tasks: [],
+    time: getDateTime(),
   };
 
   tasks.push(task);
@@ -76,9 +83,6 @@ const renderTasks = () => {
 
     const div = createElement("div");
 
-    const edit = createElement("button");
-    edit.innerHTML = `<span class="material-symbols-outlined">edit</span>`;
-
     const remove = createElement("button");
     remove.innerHTML = `<span class="material-symbols-outlined">delete</span>`;
     remove.addEventListener("click", () => {
@@ -87,7 +91,6 @@ const renderTasks = () => {
 
     DOM.list.appendChild(li);
     li.appendChild(div);
-    div.appendChild(edit);
     div.appendChild(remove);
   });
 };
@@ -121,7 +124,7 @@ const renderSubtasks = (index) => {
   const header = createElement("header");
 
   const h2 = createElement("h2");
-  h2.textContent = tasks[index].title;
+  h2.textContent = `${tasks[index].title} - ${tasks[index].time}`;
 
   const div = createElement("div");
 
@@ -144,9 +147,6 @@ const renderSubtasks = (index) => {
 
     const div = createElement("div");
 
-    const edit = createElement("button");
-    edit.innerHTML = ` <span class="material-symbols-outlined">edit</span>`;
-
     const remove = createElement("button");
     remove.innerHTML = ` <span class="material-symbols-outlined">delete</span>`;
     remove.addEventListener("click", () => {
@@ -155,7 +155,6 @@ const renderSubtasks = (index) => {
 
     ul.appendChild(li);
     li.appendChild(div);
-    div.appendChild(edit);
     div.appendChild(remove);
   });
 
