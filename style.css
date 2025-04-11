@@ -36,6 +36,8 @@ button {
   border: none;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
+
+  color: white;
 }
 
 button:hover {
@@ -133,7 +135,7 @@ main {
   border: none;
   border-radius: 7px;
 
-  color: var(--cor7);
+  color: white;
 
   cursor: pointer;
 
@@ -184,7 +186,7 @@ main {
   background-color: var(--cor8);
   border: none;
   border-radius: 7px;
-  color: var(--cor7);
+  color: white;
   cursor: pointer;
   transition: all 0.3s;
 }
@@ -217,7 +219,11 @@ main {
   color: var(--cor7);
 }
 
-.show-tasks header span {
+.show-tasks header button {
+  color: white;
+}
+
+.show-tasks header h2 {
   font-size: 2rem;
   color: var(--cor7);
 }
@@ -243,7 +249,7 @@ main {
   border: none;
   border-radius: 7px;
   background-color: var(--cor8);
-  color: var(--cor1);
+  color: white;
   cursor: pointer;
   transition: all 0.3s;
 }

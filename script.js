@@ -1,155 +1,190 @@
-let tarefas = JSON.parse(localStorage.getItem("tarefas")) || [];
-let tarefaSelecionada = null;
+import { DOM } from "./DOM.js";
 
-function salvarTarefas() {
-  localStorage.setItem("tarefas", JSON.stringify(tarefas));
-}
+const createElement = (tag) => {
+  const element = document.createElement(tag);
+  return element;
+};
 
-function adicionarTarefa() {
-  const tituloInput = document.getElementById("tituloTarefa");
-  const titulo = tituloInput.value.trim();
-  if (titulo === "") return;
+// Liga e deliga o modo noturno
+DOM.toggleTheme.addEventListener("click", () => {
+  document.documentElement.classList.toggle("dark-theme");
+});
 
-  const novaTarefa = { titulo, subtarefas: [] };
-  tarefas.push(novaTarefa);
-  tituloInput.value = "";
-  salvarTarefas();
-  renderizarLista();
-}
+let listState = true;
 
-function removerTarefa() {
-  if (tarefaSelecionada === null) return;
-  tarefas.splice(tarefaSelecionada, 1);
-  tarefaSelecionada = null;
-  salvarTarefas();
-  renderizarLista();
-  renderizarTarefa();
-}
+DOM.toggleList.forEach((e) => {
+  e.addEventListener("click", () => {
+    listState = !listState;
 
-function editarTarefa() {
-  if (tarefaSelecionada === null) return;
-
-  const novoTitulo = prompt(
-    "Edite o título da tarefa:",
-    tarefas[tarefaSelecionada].titulo
-  );
-  if (novoTitulo !== null && novoTitulo.trim() !== "") {
-    tarefas[tarefaSelecionada].titulo = novoTitulo.trim();
-    salvarTarefas();
-    renderizarLista();
-    renderizarTarefa();
-  }
-}
-
-function selecionarTarefa(index) {
-  tarefaSelecionada = index;
-  renderizarTarefa();
-}
-
-function adicionarSubtarefa() {
-  if (tarefaSelecionada === null) return;
-
-  const subtarefaInput = document.getElementById("subtarefaInput");
-  const subtitulo = subtarefaInput.value.trim();
-  if (subtitulo === "") return;
-
-  tarefas[tarefaSelecionada].subtarefas.push(subtitulo);
-  subtarefaInput.value = "";
-  salvarTarefas();
-  renderizarTarefa();
-}
-
-function editarSubtarefa(index) {
-  if (tarefaSelecionada === null) return;
-
-  const novoSubtitulo = prompt(
-    "Edite a subtarefa:",
-    tarefas[tarefaSelecionada].subtarefas[index]
-  );
-  if (novoSubtitulo !== null && novoSubtitulo.trim() !== "") {
-    tarefas[tarefaSelecionada].subtarefas[index] = novoSubtitulo.trim();
-    salvarTarefas();
-    renderizarTarefa();
-  }
-}
-
-function removerSubtarefa(index) {
-  tarefas[tarefaSelecionada].subtarefas.splice(index, 1);
-  salvarTarefas();
-  renderizarTarefa();
-}
-
-function renderizarLista() {
-  const lista = document.getElementById("listaTarefas");
-  lista.innerHTML = "";
-
-  tarefas.forEach((tarefa, index) => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-        <span>
-            ${tarefa.titulo}
-        </span>
-        <div>
-            <button onclick="editarTarefa()">
-                <span class="material-symbols-outlined">edit</span>
-            </button>
-
-        <button onclick="removerTarefa()">
-            <span class="material-symbols-outlined">delete</span>
-        </button>
-
-        </div>`;
-    li.onclick = () => selecionarTarefa(index);
-    lista.appendChild(li);
+    if (window.innerWidth > window.innerHeight) {
+      DOM.containerTask.style.width = listState ? "0px" : "80%";
+      DOM.containerTask.style.borderRight = listState
+        ? "0px solid black"
+        : "2px solid var(--cor5)";
+      DOM.showTasks.style.display = listState ? "100%" : "20%";
+    }
   });
-}
+});
 
-function renderizarTarefa() {
-  const container = document.getElementById("visualizacaoTarefa");
-  if (tarefaSelecionada === null) {
-    container.innerHTML = "<p>Selecione uma tarefa para visualizar.</p>";
+let tasks = [];
+
+let currentIndex = null;
+
+const getDateTime = () => {
+  const now = new Date();
+
+  const day = String(now.getDate()).padStart(2, "0");
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const year = now.getFullYear();
+
+  const hour = String(now.getHours()).padStart(2, "0");
+  const minute = String(now.getMinutes()).padStart(2, "0");
+
+  return `${day}/${month}/${year} - ${hour}:${minute}`;
+};
+
+DOM.addTask.addEventListener("click", () => {
+  const newTask = document.querySelector(".input-task");
+  let title = newTask.value.trim();
+
+  if (title === "") {
+    title = `Tarefa ${tasks.length + 1}`;
+  }
+
+  const task = {
+    title: title,
+    tasks: [],
+  };
+
+  tasks.push(task);
+  newTask.value = "";
+
+  saveTasks();
+  renderTasks();
+});
+
+const renderTasks = () => {
+  DOM.list.innerHTML = "";
+
+  tasks.forEach((e, i) => {
+    const li = createElement("li");
+    li.innerHTML = `<span>${e.title}</span>`;
+    li.addEventListener("click", () => {
+      renderSubtasks(i);
+      currentIndex = i;
+    });
+
+    const div = createElement("div");
+
+    const edit = createElement("button");
+    edit.innerHTML = `<span class="material-symbols-outlined">edit</span>`;
+
+    const remove = createElement("button");
+    remove.innerHTML = `<span class="material-symbols-outlined">delete</span>`;
+    remove.addEventListener("click", () => {
+      removeTask(i);
+    });
+
+    DOM.list.appendChild(li);
+    li.appendChild(div);
+    div.appendChild(edit);
+    div.appendChild(remove);
+  });
+};
+
+const removeTask = (index) => {
+  tasks.splice(index, 1);
+  saveTasks();
+  renderTasks();
+};
+
+const addSubtask = (index) => {
+  const newSubTask = document.querySelector(".input-subtask");
+  let title = newSubTask.value.trim();
+
+  if (title === "") {
+    newSubTask.setCustomValidity("Por favor, preencha este campo.");
+    newSubTask.reportValidity();
     return;
   }
 
-  const tarefa = tarefas[tarefaSelecionada];
-  container.innerHTML = `
-        <div class="task-details">
-            <header>
-                <h2>${tarefa.titulo}</h2>
-            </header>
+  tasks[index].tasks.push(title);
+  newSubTask.value = "";
 
-            <div>
-                <input type="text" id="subtarefaInput" placeholder="Nova subtarefa">
-                <button onclick="adicionarSubtarefa()">Adicionar</button>
-            </div>
+  saveTasks();
+  renderSubtasks(index);
+};
 
-            <hr>
+const renderSubtasks = (index) => {
+  DOM.showTasks.innerHTML = "";
 
-            <section class="subtasks">
-                ${tarefa.subtarefas
-                  .map(
-                    (sub, i) => `
-                    <div>
-                        <span>${sub}</span>
+  const header = createElement("header");
 
-                        <div>
-                            <button onclick="editarSubtarefa(${i})">
-                                <span class="material-symbols-outlined">edit</span>
-                            </button>
+  const h2 = createElement("h2");
+  h2.textContent = tasks[index].title;
 
-                            <button onclick="removerSubtarefa(${i})">
-                                <span class="material-symbols-outlined">delete</span>
-                            </button>
-                        </div>
-                    </div>
-                `
-                  )
-                  .join("")}
-            </section>
-        </div>
-    `;
-}
+  const div = createElement("div");
 
-document.addEventListener("DOMContentLoaded", () => {
-  renderizarLista();
-});
+  const input = createElement("input");
+  input.type = "text";
+  input.placeholder = "Escreva aqui sua tarefa";
+  input.classList.add("input-subtask");
+
+  const button = createElement("button");
+  button.innerHTML = `<span class="material-symbols-outlined">add</span>`;
+  button.addEventListener("click", () => {
+    addSubtask(index);
+  });
+
+  const ul = createElement("ul");
+
+  tasks[index].tasks.forEach((e, i) => {
+    const li = createElement("li");
+    li.textContent = e;
+
+    const div = createElement("div");
+
+    const edit = createElement("button");
+    edit.innerHTML = ` <span class="material-symbols-outlined">edit</span>`;
+
+    const remove = createElement("button");
+    remove.innerHTML = ` <span class="material-symbols-outlined">delete</span>`;
+    remove.addEventListener("click", () => {
+      removeSubtask(index, i);
+    });
+
+    ul.appendChild(li);
+    li.appendChild(div);
+    div.appendChild(edit);
+    div.appendChild(remove);
+  });
+
+  DOM.showTasks.appendChild(header);
+  header.appendChild(h2);
+  header.appendChild(div);
+  div.appendChild(input);
+  div.appendChild(button);
+
+  DOM.showTasks.appendChild(ul);
+};
+
+const removeSubtask = (taskIndex, subtaskIndex) => {
+  tasks[taskIndex].tasks.splice(subtaskIndex, 1);
+  saveTasks();
+  renderSubtasks(taskIndex);
+};
+
+const saveTasks = () => {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+};
+
+const loadTasks = () => {
+  const saved = localStorage.getItem("tasks");
+
+  if (saved) {
+    tasks = JSON.parse(saved);
+    renderTasks();
+  }
+};
+
+loadTasks();
