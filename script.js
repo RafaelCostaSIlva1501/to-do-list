@@ -124,7 +124,10 @@ const renderSubtasks = (index) => {
   const header = createElement("header");
 
   const h2 = createElement("h2");
-  h2.textContent = `${tasks[index].title} - ${tasks[index].time}`;
+  h2.textContent = tasks[index].title;
+
+  const span = createElement("span");
+  span.textContent = tasks[index].time;
 
   const div = createElement("div");
 
@@ -160,6 +163,7 @@ const renderSubtasks = (index) => {
 
   DOM.showTasks.appendChild(header);
   header.appendChild(h2);
+  header.appendChild(span)
   header.appendChild(div);
   div.appendChild(input);
   div.appendChild(button);

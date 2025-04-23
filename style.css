@@ -216,6 +216,7 @@ main {
   padding: 10px;
   background-color: var(--cor3);
   border-radius: 5px;
+  overflow-wrap: break-word;
   color: var(--cor7);
 }
 
@@ -262,10 +263,15 @@ main {
   display: flex;
   flex-direction: column;
   gap: 10px;
+
   padding: 10px;
-  list-style: none;
-  overflow-y: auto;
+
   background-color: var(--cor3);
+  border-radius: 5px;
+
+  list-style: none;
+
+  overflow-y: auto;
 }
 
 .show-tasks li {
